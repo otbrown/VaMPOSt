@@ -1,12 +1,13 @@
 #include "SiteTensor.h"
 
 inline int
-vampost::SiteTensor::linearIndex(int row, int col, int bra, int ket) {
+vampost::SiteTensor::linearIndex(int row, int col, int bra, int ket)
+const {
   return ket * DIMS[1] * DIMS[2] * DIMS[3] + bra * DIMS[2] * DIMS[3]
     + row * DIMS[3] + col;
 }
 
-inline int vampost::SiteTensor::linearIndex(int bra, int ket) {
+inline int vampost::SiteTensor::linearIndex(int bra, int ket) const {
   return ket * DIMS[1] * DIMS[2] * DIMS[3] + bra * DIMS[2] * DIMS[3];
 }
 
@@ -26,7 +27,7 @@ vampost::SiteTensor::SiteTensor(int NROWS, int NCOLS, int HILBY)
     {};
 
 inline vampost::Complex
-vampost::SiteTensor::getElement(int row, int col, int bra, int ket) {
+vampost::SiteTensor::getElement(int row, int col, int bra, int ket) const {
   return data[linearIndex(row, col, bra, ket)];
 }
 
@@ -39,4 +40,18 @@ vampost::SiteTensor::getMatrix(int bra, int ket) {
   std::vector<vampost::Complex> mat(startIter, startIter+mat_size);
 
   return mat;
+}
+
+void vampost::SiteTensor::setElement(int row, int col, int bra, int ket,
+vampost::Complex element) {
+  data[linearIndex(row, col, bra, ket)] = element;
+
+  return;
+}
+
+void vampost::SiteTensor::setMatrix(int bra, int ket,
+const std::vector<vampost::Complex>& matrix) {
+  const std::vector<vampost::Complex>::iterator startIter = getIter(bra, ket);
+  std::copy(matrix.begin(), matrix.end(), startIter);
+  return;
 }
