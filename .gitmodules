@@ -1,0 +1,3 @@
+[submodule "dependencies/ITensor"]
+	path = dependencies/ITensor
+	url = git@github.com:ITensor/ITensor.git
