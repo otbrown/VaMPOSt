@@ -1,3 +1,16 @@
+add_library(libitensor STATIC IMPORTED)
+
+target_include_directories(libitensor
+  INTERFACE
+  ${ITENSOR_DIR}/itensor
+  ${BLAS_INCLUDE_DIR}
+)
+
+set_target_properties(libitensor 
+  PROPERTIES 
+  IMPORTED_LOCATION ${ITENSOR_DIR}/lib/libitensor.a
+)
+
 add_library(vampost
   STATIC
   dmpo.cpp
@@ -12,4 +25,9 @@ target_include_directories(vampost
   ${BLAS_INCLUDE_DIR}
 )
 
-target_link_libraries(vampost PUBLIC ${ITENSOR_DIR}/lib/libitensor)
+target_link_libraries(vampost 
+  PUBLIC 
+  libitensor 
+  ${BLAS_LIBRARIES} 
+  ${LAPACK_LIBRARIES}
+)
